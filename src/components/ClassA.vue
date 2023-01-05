@@ -3,7 +3,7 @@
     <nav class="navbar fixed-top bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">class A</a>
-        <button class="nav-link active" aria-current="page" @click = "gotoHome">Home</button>
+        <router-link to="/teacherHome">Home</router-link>
       </div>
     </nav>
 
