@@ -4,7 +4,6 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Student</a>
         <button class = "btn-outline-light-blue" @click="logout">로그아웃</button>
-        <!--        <a class="nav-link active" aria-current="page" href="#" @click = "goHome">학생정보조회</a>-->
       </div>
     </nav>
 
@@ -16,11 +15,11 @@
         <th>제목</th>
         <th>-</th>
       </tr>
-      <tr v-for = "(row,i) in rows" :key="row.id">
+      <tr v-for = "(author,i) in authors" :key="i">
         <td>{{i}}</td>
-        <td>{{ row.class}}</td>
-        <td>{{ row.name }}</td>
-        <td>{{ posts.title }}</td>
+        <td>{{ author.class}}</td>
+        <td>{{ author.name }}</td>
+        <td>{{ author.board.title }}</td>
         <td>
           <button class = "btn-outline-dark">글보기</button>
         </td>
@@ -43,7 +42,7 @@ export default {
   data() {
     return {
       fbCollection: 'board',
-      rows : [],
+      authors : [],
       posts : [],
     }
   },
@@ -53,10 +52,11 @@ export default {
   },
   methods:{
     init() {
-      this.getDatalist()
+      this.getPostlist()
+      this.getDataList()
     },
 
-    getDatalist() {
+    getPostlist() {
       const self = this;
       const db = firebase.firestore();
       db.collection(self.fbCollection)
@@ -71,6 +71,24 @@ export default {
               self.posts.push(_data);
             });
           })
+    },
+    getDataList() {
+      const self = this;
+      const db = firebase.firestore();
+      db.collection("student")
+          .where("board", "!=","")
+          .get()
+          .then((querySnapshot) => {
+            if (querySnapshot.size === 0) {
+              return
+            }
+            querySnapshot.forEach((doc) => {
+              const _data = doc.data();
+              _data.id = doc.id
+              self.authors.push(_data);
+            });
+          })
+
     },
       logout() {
         firebase.auth().signOut()
