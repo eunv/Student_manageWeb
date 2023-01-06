@@ -13,7 +13,7 @@
     </div>
 
     <div v-if="owner">
-      <button class="btn-outline-light-blue right">수정</button>
+      <button class="btn-outline-light-blue right" @click="goPostEdit(post.board.uid)">수정</button>
     </div>
   </div>
 </template>
@@ -55,7 +55,11 @@ export default {
     goBack() {
       const self = this;
       self.$router.push('studentHome')
-    }
+    },
+    goPostEdit(value) {
+      const self = this;
+      self.$router.push({name:'postEdit', params:{id: value}})
+    },
   },
 }
 

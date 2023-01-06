@@ -16,6 +16,11 @@ const router = new Router({
       component: () => import('../components/Login'),
     },
     {
+      path: '/postEdit',
+      name: 'postEdit',
+      component: () => import('../components/PostEdit'),
+    },
+    {
       path: '/writeView',
       name: 'writeView',
       component: () => import('../components/WriteView'),
