@@ -1,15 +1,15 @@
 <template>
   <div>
     <h4>회원가입</h4>
-    메일 :<input type="text " v-model="curuser.email"><br>
-    PW :<input type="text " v-model="curuser.pw"><br>
+    메일 :<input type="text" v-model="curUser.email"><br>
+    PW :<input type="password" v-model="curUser.pw"><br>
     <br><h4>회원정보</h4>
-    phone :<input type="text " v-model="curuser.phone"><br>
-    이름 :<input type="text " v-model="curuser.name"><br>
-    나이 :<input type="text " v-model="curuser.age"><br>
-    성별 :<input type="text " v-model="curuser.gender"><br>
-    반  :<input type="text " v-model="curuser.class"><br>
-    <button @click="regist">등록</button>
+    phone :<input type="text" v-model="curUser.phone"><br>
+    이름 :<input type="text" v-model="curUser.name"><br>
+    나이 :<input type="text" v-model="curUser.age"><br>
+    성별 :<input type="text" v-model="curUser.gender"><br>
+    반  :<input type="text" v-model="curUser.class"><br>
+    <button class = "btn-outline-light-blue" @click="regist">등록</button>
   </div>
 </template>
 
@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       fbCollection: 'student',
-      curuser: {
+      curUser: {
         pw: '',
         phone: '',
         name: '',
@@ -37,7 +37,7 @@ export default {
     regist() {
       const self = this;
       const db = firebase.firestore();
-      firebase.auth().createUserWithEmailAndPassword(self.curuser.email, self.curuser.pw)
+      firebase.auth().createUserWithEmailAndPassword(self.curUser.email, self.curUser.pw)
           .then((userCredential) => {
             alert('회원가입 완료')
             let user = userCredential.user
@@ -45,16 +45,17 @@ export default {
             const currentUser = {
               uid:userCredential.user.uid,
             }
+            console.log(currentUser.uid)
             db.collection(self.fbCollection)
                 .doc(currentUser.uid)
                 .set({
                   level:'1',
-                  email:self.curuser.email,
-                  phone:self.curuser.phone,
-                  name:self.curuser.name,
-                  age:self.curuser.age,
-                  gender:self.curuser.gender,
-                  class:self.curuser.class,
+                  email:self.curUser.email,
+                  phone:self.curUser.phone,
+                  name:self.curUser.name,
+                  age:self.curUser.age,
+                  gender:self.curUser.gender,
+                  class:self.curUser.class,
                 })
             console.log(currentUser.uid)
 

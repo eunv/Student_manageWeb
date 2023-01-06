@@ -40,6 +40,36 @@ const router = new Router({
 
     },
     {
+      path: '/StudentPlus',
+      name: 'StudentPlus',
+      component: () => import('../components/StudentPlus.vue'),
+
+    },
+    {
+      path: '/studentEdit',
+      name: 'studentEdit',
+      component: () => import('../components/StudentEdit'),
+
+    },
+    {
+      path: '/detail',
+      name: 'detail',
+      component: () => import('../components/Detail'),
+
+    },
+    {
+      path: '/allStudent',
+      name: 'allStudent',
+      component: () => import('../components/AllStudent'),
+
+    },
+    {
+      path: '/edit',
+      name: 'edit',
+      component: () => import('../components/Edit'),
+
+    },
+    {
       path: '/classA',
       name: 'classA',
       component: () => import('../components/ClassA'),

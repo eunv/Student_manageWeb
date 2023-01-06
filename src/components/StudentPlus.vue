@@ -2,15 +2,18 @@
   <div class="home">
     <nav class="navbar fixed-top bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">class B</a>
+        <a class="navbar-brand" href="#">학생추가</a>
         <router-link to="/teacherHome">Home</router-link>
       </div>
     </nav>
+    <div class= 'right'>
+      <button class = "btn-outline-light-blue " @click="goA">뒤로</button>
+    </div>
 
     <div>
       <table class = "table table-bordered">
         <tr>
-          <th>class</th>
+          <th>-</th>
           <th>이름</th>
           <th>나이</th>
           <th>성별</th>
@@ -19,7 +22,9 @@
         </tr>
 
         <tr v-for = "row in rows" :key="row.id">
-          <td>{{row.class}}</td>
+          <td>
+            <button type="button" class="btn-outline-light-blue" @click = "gotoDetail(row.id)">Info</button>
+          </td>
           <td>{{ row.name }}</td>
           <td>{{ row.age }}</td>
           <td>{{ row.gender }}</td>
@@ -35,14 +40,10 @@
 </template>
 
 <script>
-
 import {firebase} from "@/firebase/firebaseConfig";
 
 export default {
-  name: 'home',
-  components: {
-
-  },
+  name: 'studentPlus',
   data() {
     return {
       fbCollection: 'student',
@@ -53,7 +54,7 @@ export default {
     const self = this;
     self.init();
   },
-  methods : {
+  methods: {
     init() {
       this.getDatalist()
     },
@@ -62,7 +63,7 @@ export default {
       const self = this;
       const db = firebase.firestore();
       db.collection(self.fbCollection)
-          .where("class",'==','B')
+          .where("class",'==','')
           .get()
           .then((querySnapshot) => {
             if (querySnapshot.size === 0) {
@@ -75,40 +76,24 @@ export default {
             });
           })
     },
-    gotoHome() {
-      // const self = this;
-      this.$router.push('/')
+    goA() {
+      const self = this;
+      self.$router.push({name: 'classA'})
     },
-    aStudentPlus() {
-      this.$router.push('/aStudentPlus');
+    gotoDetail(value) {
+      const self = this;
+      self.$router.push({name: 'detail', params:{id: value}})
     },
-
   },
-
 
 }
 
 </script>
 
 <style>
-home {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+.right {
+  float: right;
+  padding:8px;
 }
-
-/*table {*/
-/*  font-family: arial, sans-serif;*/
-/*  border-collapse: collapse;*/
-/*  width: 50%;*/
-/*  margin : 100px;*/
-/*}*/
-/*td, th {*/
-/*  border: 1px solid #dddddd;*/
-/*  text-align: center;*/
-/*  padding: 8px;*/
-/*}*/
 
 </style>
