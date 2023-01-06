@@ -16,6 +16,12 @@ const router = new Router({
       component: () => import('../components/Login'),
     },
     {
+      path: '/writeView',
+      name: 'writeView',
+      component: () => import('../components/WriteView'),
+
+    },
+    {
       path: '/studentRegister',
       name: 'studentRegister',
       component: () => import('../components/StudentRegister'),

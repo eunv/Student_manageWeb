@@ -21,7 +21,7 @@
         <td>{{ author.name }}</td>
         <td>{{ author.board.title }}</td>
         <td>
-          <button class = "btn-outline-dark">글보기</button>
+          <button class = "btn-outline-dark" @click="seePost(author.board.uid)">글보기</button>
         </td>
 
 
@@ -43,7 +43,7 @@ export default {
     return {
       fbCollection: 'board',
       authors : [],
-      posts : [],
+      posts : {},
     }
   },
   mounted() {
@@ -52,11 +52,11 @@ export default {
   },
   methods:{
     init() {
-      this.getPostlist()
+      this.getPostList()
       this.getDataList()
     },
 
-    getPostlist() {
+    getPostList() {
       const self = this;
       const db = firebase.firestore();
       db.collection(self.fbCollection)
@@ -68,7 +68,7 @@ export default {
             querySnapshot.forEach((doc) => {
               const _data = doc.data();
               _data.id = doc.id
-              self.posts.push(_data);
+              self.posts = _data
             });
           })
     },
@@ -85,10 +85,13 @@ export default {
             querySnapshot.forEach((doc) => {
               const _data = doc.data();
               _data.id = doc.id
-              self.authors.push(_data);
+              self.authors.push(_data)
             });
           })
-
+    },
+    seePost(value) {
+      const self = this
+      self.$router.push({name:'writeView', params: {id:value}})
     },
       logout() {
         firebase.auth().signOut()
