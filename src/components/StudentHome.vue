@@ -20,7 +20,7 @@
         <th>-</th>
       </tr>
       <tr v-for="(post,i) in posts" :key="i">
-        <td>{{ i }}</td>
+        <td>{{ i+1 }}</td>
         <td>{{ post.student.class }}</td>
         <td>{{ post.student.name }}</td>
         <td>{{ post.title }}</td>
@@ -46,8 +46,26 @@ export default {
       authors: [],
       posts: [],
       searchKeyword: '',
+      // pageNum: 0,
+      // pageSize:5,
     }
   },
+  // computed: {
+  //   pageCount() {
+  //     const listLeng = this.listArray.length;
+  //     const listSize = this.pageSize;
+  //     let page = Math.floor(listLeng / listSize);
+  //     if (listLeng % listSize > 0) page += 1;
+  //
+  //     return page;
+  //   },
+  //
+  //   paginatedData() {
+  //     const start = this.pageNum * this.pageSize;
+  //     const end = start + this.pageSize;
+  //     return this.posts.slice(start, end);
+  //   },
+  // },
   mounted() {
     const self = this;
     self.init();
@@ -55,8 +73,15 @@ export default {
   methods: {
     init() {
       this.getPostList()
-    },
 
+    },
+    // 페이지네이션 구현 페이지 넘기는 함수
+    // nextPage() {
+    //   this.pageNum += 1;
+    // },
+    // prevPage() {
+    //   this.pageNum -= 1;
+    // },
     getPostList() {
       const self = this;
       const db = firebase.firestore();
@@ -89,7 +114,6 @@ export default {
             }
             querySnapshot.forEach((doc) => {
               const _data = doc.data();
-              console.log(_data)
               _data.id = doc.id
               self.posts.push(_data)
 

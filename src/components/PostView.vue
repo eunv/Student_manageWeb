@@ -89,10 +89,11 @@ export default {
     createReply() {
       const self = this;
       const db = firebase.firestore();
-
+      const now = new Date();
       const _data = {
         board_id: self.id,
         content: self.comment,
+        time: now,
         student: {
           age: self.studentInfo.age,
           class: self.studentInfo.class,
@@ -101,6 +102,7 @@ export default {
           level: self.studentInfo.level,
           name: self.studentInfo.name,
           phone: self.studentInfo.phone,
+
         }
         // time:
       }
@@ -109,7 +111,7 @@ export default {
           .set(_data, {merge: true} )
           .then(() => {
             alert("댓글작성 완료!")
-            self.$router.push('/postView')
+            self.$router.push('/studentHome')
           })
     },
     getData() {
