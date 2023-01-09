@@ -15,18 +15,17 @@
         <th>제목</th>
         <th>-</th>
       </tr>
-      <tr v-for = "(author,i) in authors" :key="i">
+      <tr v-for = "(post,i) in posts" :key="i">
         <td>{{i}}</td>
-        <td>{{ author.class}}</td>
-        <td>{{ author.name }}</td>
-        <td>{{ author.board.title }}</td>
+        <td>{{ post.student.class}}</td>
+        <td>{{ post.student.name }}</td>
+        <td>{{ post.title }}</td>
         <td>
-          <button class = "btn-outline-dark" @click="seePost(author.board.uid)">글보기</button>
+          <button class = "btn-outline-dark" @click="seePost(post.id)">글보기</button>
         </td>
-
-
       </tr>
     </table>
+    <button class = "btn-outline-dark" @click="seePost(post.id)">글 작성</button>
 
   </div>
 </template>
@@ -43,7 +42,7 @@ export default {
     return {
       fbCollection: 'board',
       authors : [],
-      posts : {},
+      posts : [],
     }
   },
   mounted() {
@@ -53,7 +52,7 @@ export default {
   methods:{
     init() {
       this.getPostList()
-      this.getDataList()
+      // this.getDataList()
     },
 
     getPostList() {
@@ -68,7 +67,7 @@ export default {
             querySnapshot.forEach((doc) => {
               const _data = doc.data();
               _data.id = doc.id
-              self.posts = _data
+              self.posts.push(_data)
             });
           })
     },

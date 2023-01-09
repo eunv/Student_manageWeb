@@ -5,13 +5,10 @@
         <a class="navbar-brand" href="#">게시글 수정</a>
       </div>
     </nav>
-
-    <button class="btn-outline-amber right" @click="goBack(post.board.uid)">취소</button>
-    <button class="btn-outline-green right" @click="confirm(post.board.uid)">확인</button>
-
     <div>제목: <input type="text" v-model="post.title"></div>
-    <div>제목: <input type="text" v-model="post.content"></div>
-
+    <div>내용: <input type="text" v-model="post.content"></div>
+    <button class="btn-outline-amber right" @click="goBack">취소</button>
+    <button class="btn-outline-green right" @click="confirm">확인</button>
   </div>
 </template>
 
@@ -22,9 +19,12 @@ export default {
   name: 'postEdit',
   data() {
     return {
-      fbCollection: 'student',
+      fbCollection: 'board',
       id: this.$route.params.id,
-      post : {},
+      post : {
+        title: '',
+        content: '',
+      },
     }
   },
   mounted() {
@@ -33,7 +33,8 @@ export default {
   },
   methods: {
     init() {
-      this.getData()
+      const self = this;
+      self.getData()
     },
     getData() {
       const self = this;
@@ -50,28 +51,19 @@ export default {
       const db = firebase.firestore();
 
       const _data = {
-        name: self.student.name,
-        gender: self.student.gender,
-        phone: self.student.phone,
-        age: self.student.age,
-        class: self.student.class
+        title: self.post.title,
+        content: self.post.content
       }
       db.collection(self.fbCollection)
           .doc(self.id)
           .set(_data, {merge: true} )
           .then(() => {
-            self.$router.push({name: 'detail', params:{id: self.id}})
-          })
-      db.collection("board")
-          .where("uid","==","self.id")
-          .get()
-          .then(() =>{
-
+            self.$router.push({name: 'writeView', params:{id: self.id}})
           })
     },
-    goBack(value) {
+    goBack() {
       const self = this;
-      self.$router.push({name:'writeView',params: {id:value}})
+      self.$router.push({name:'writeView',params: {id:self.id}})
     },
 
   },

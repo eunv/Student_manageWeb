@@ -6,14 +6,13 @@
         <button class="btn-outline-light-blue" @click="goBack">뒤로</button>
       </div>
     </nav>
-    <div v-if="post.board != null">
-      <h4>제목: {{ post.board.title }}</h4>
-      <h4>내용: {{ post.board.content }}</h4>
-
+    <div>
+      <h4>제목: {{ post.title }}</h4>
+      <h4>내용: {{ post.content }}</h4>
     </div>
 
     <div v-if="owner">
-      <button class="btn-outline-light-blue right" @click="goPostEdit(post.board.uid)">수정</button>
+      <button class="btn-outline-light-blue right" @click="goPostEdit">수정</button>
     </div>
   </div>
 </template>
@@ -25,9 +24,9 @@ export default {
   name: 'writeView',
   data() {
     return {
-      fbCollection: 'student',
+      fbCollection: 'board',
       id: this.$route.params.id,
-      post: {},
+      post: [],
       owner: false,
     }
   },
@@ -47,18 +46,19 @@ export default {
           .get()
           .then((snapshot) => {
             self.post = snapshot.data();
+            if (this.$store.state.user.uid === self.post.uid) {
+              self.owner = true
+            }
           })
-      if (this.$store.state.user.uid === self.id) {
-        self.owner = true
-      }
+
     },
     goBack() {
       const self = this;
       self.$router.push('studentHome')
     },
-    goPostEdit(value) {
+    goPostEdit() {
       const self = this;
-      self.$router.push({name:'postEdit', params:{id: value}})
+      self.$router.push({name:'postEdit', params:{id: self.id}})
     },
   },
 }
