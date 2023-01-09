@@ -14,6 +14,15 @@
     <div v-if="owner">
       <button class="btn-outline-light-blue right" @click="goPostEdit">수정</button>
     </div>
+    <br>
+    <form class="form-group fixed-bottom">
+      <div>
+        <label>댓글 작성</label>
+        <textarea class="form-control" id="comment-content" rows="3"></textarea>
+      </div>
+      <input type="hidden" id="comment-author" value="익명">
+      <button type="button" class="btn btn-primary" id="comment-create-btn">제출</button>
+    </form>
   </div>
 </template>
 

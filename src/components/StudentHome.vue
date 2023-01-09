@@ -25,7 +25,7 @@
         </td>
       </tr>
     </table>
-    <button class = "btn-outline-dark" @click="seePost(post.id)">글 작성</button>
+    <button class = "btn-outline-dark" @click="createPost">글 작성</button>
 
   </div>
 </template>
@@ -52,7 +52,6 @@ export default {
   methods:{
     init() {
       this.getPostList()
-      // this.getDataList()
     },
 
     getPostList() {
@@ -71,26 +70,13 @@ export default {
             });
           })
     },
-    getDataList() {
-      const self = this;
-      const db = firebase.firestore();
-      db.collection("student")
-          .where("board", "!=","")
-          .get()
-          .then((querySnapshot) => {
-            if (querySnapshot.size === 0) {
-              return
-            }
-            querySnapshot.forEach((doc) => {
-              const _data = doc.data();
-              _data.id = doc.id
-              self.authors.push(_data)
-            });
-          })
-    },
     seePost(value) {
       const self = this
-      self.$router.push({name:'writeView', params: {id:value}})
+      self.$router.push({name:'postView', params: {id:value}})
+    },
+    createPost() {
+      const self = this;
+      self.$router.push('/newPost')
     },
       logout() {
         firebase.auth().signOut()

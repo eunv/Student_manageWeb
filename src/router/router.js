@@ -16,14 +16,19 @@ const router = new Router({
       component: () => import('../components/Login'),
     },
     {
+      path: '/newPost',
+      name: 'newPost',
+      component: () => import('../components/NewPost'),
+    },
+    {
       path: '/postEdit',
       name: 'postEdit',
       component: () => import('../components/PostEdit'),
     },
     {
-      path: '/writeView',
-      name: 'writeView',
-      component: () => import('../components/WriteView'),
+      path: '/postView',
+      name: 'postView',
+      component: () => import('../components/PostView.vue'),
 
     },
     {

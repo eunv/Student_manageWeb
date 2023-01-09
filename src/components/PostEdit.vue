@@ -58,12 +58,12 @@ export default {
           .doc(self.id)
           .set(_data, {merge: true} )
           .then(() => {
-            self.$router.push({name: 'writeView', params:{id: self.id}})
+            self.$router.push({name: 'postView', params:{id: self.id}})
           })
     },
     goBack() {
       const self = this;
-      self.$router.push({name:'writeView',params: {id:self.id}})
+      self.$router.push({name:'postView',params: {id:self.id}})
     },
 
   },
