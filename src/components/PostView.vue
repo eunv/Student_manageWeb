@@ -9,19 +9,32 @@
     <div>
       <h4>제목: {{ post.title }}</h4>
       <h4>내용: {{ post.content }}</h4>
+<!--      {{replies}}-->
     </div>
 
     <div v-if="owner">
       <button class="btn-outline-light-blue right" @click="goPostEdit">수정</button>
     </div>
-    <br>
+
+    <table class="table table-bordered">
+      <tr>
+        <th>작성자</th>
+        <th>댓글</th>
+<!--        <th>작성 시간</th>-->
+      </tr>
+      <tr v-for="(reply,i) in replies" :key="i">
+        <td>{{reply.student.name}}</td>
+        <td>{{reply.content}}</td>
+<!--        <td>{{reply.time}}</td>-->
+      </tr>
+    </table>
+
     <form class="form-group fixed-bottom">
       <div>
         <label>댓글 작성</label>
-        <textarea class="form-control" id="comment-content" rows="3"></textarea>
+        <textarea class="form-control" v-model="comment" id="comment-content" rows="3"></textarea>
       </div>
-      <input type="hidden" id="comment-author" value="익명">
-      <button type="button" class="btn btn-primary" id="comment-create-btn">제출</button>
+      <button type="button" class="btn btn-primary" id="comment-create-btn" @click="createReply">작성</button>
     </form>
   </div>
 </template>
@@ -35,8 +48,11 @@ export default {
     return {
       fbCollection: 'board',
       id: this.$route.params.id,
+      studentInfo: {},
       post: [],
       owner: false,
+      replies: [],
+      comment: '',
     }
   },
   mounted() {
@@ -46,6 +62,55 @@ export default {
   methods: {
     init() {
       this.getData()
+      this.getReplyList()
+      this.getLoginData()
+    },
+    getReplyList() {
+      const self = this;
+      const db = firebase.firestore();
+      db.collection("reply")
+          .where("board_id","==",self.id)
+          .get()
+          .then((querySnapshot) => {
+            if (querySnapshot.size === 0) {
+              return
+            }
+            querySnapshot.forEach((doc) => {
+              const _data = doc.data();
+              _data.id = doc.id
+              self.replies.push(_data)
+              // let myTimeDate = new Date(replie.time.seconds *1000)
+              // console.log(myTimeDate)
+
+            });
+
+          })
+    },
+    createReply() {
+      const self = this;
+      const db = firebase.firestore();
+
+      const _data = {
+        board_id: self.id,
+        content: self.comment,
+        student: {
+          age: self.studentInfo.age,
+          class: self.studentInfo.class,
+          email: self.studentInfo.email,
+          gender: self.studentInfo.gender,
+          level: self.studentInfo.level,
+          name: self.studentInfo.name,
+          phone: self.studentInfo.phone,
+        }
+        // time:
+      }
+      db.collection("reply")
+          .doc()
+          .set(_data, {merge: true} )
+          .then(() => {
+            alert("댓글작성 완료!")
+            self.$router.push('/postView')
+          })
     },
     getData() {
       const self = this;
@@ -59,8 +124,18 @@ export default {
               self.owner = true
             }
           })
-
     },
+    getLoginData() {
+      const self = this;
+      const db = firebase.firestore();
+      db.collection("student")
+          .doc(this.$store.state.user.uid)
+          .get()
+          .then((snapshot) => {
+            self.studentInfo = snapshot.data();
+          })
+    },
+
     goBack() {
       const self = this;
       self.$router.push('studentHome')

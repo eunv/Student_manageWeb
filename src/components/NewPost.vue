@@ -1,5 +1,11 @@
 <template>
   <div>
+    <nav class="navbar fixed-top bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">게시글 작성</a>
+      </div>
+    </nav>
+
     <div>제목: <input type="text" v-model="post.title"></div>
     <div>내용: <input type="text" v-model="post.content"></div>
     <button class="btn-outline-amber right" @click="goBack">취소</button>

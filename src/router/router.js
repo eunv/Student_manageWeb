@@ -62,12 +62,6 @@ const router = new Router({
 
     },
     {
-      path: '/studentEdit',
-      name: 'studentEdit',
-      component: () => import('../components/StudentEdit'),
-
-    },
-    {
       path: '/detail',
       name: 'detail',
       component: () => import('../components/Detail'),

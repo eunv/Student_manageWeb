@@ -40,19 +40,17 @@ export default {
   methods: {
     login() {
       const self = this;
-
       firebase.auth().signInWithEmailAndPassword(self.email, self.password)
           .then(() => {
             alert('로그인 완료')
-            this.loginCheck()
-
+            setTimeout(() => {this.loginCheck()},1);
           })
           .catch((error) => {
             alert(error)
           })
     },
     loginCheck(){
-      if(this.$store.state.user != null){
+        if(this.$store.state.user != null){
         if( this.$store.state.user.displayName === '0'){
           this.$router.push('teacherHome')
         }else if(this.$store.state.user.displayName === '1'){

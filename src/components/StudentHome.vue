@@ -3,11 +3,15 @@
     <nav class="navbar fixed-top bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Student</a>
-        <button class = "btn-outline-light-blue" @click="logout">로그아웃</button>
+        <!--        <form class="d-flex" role="search">-->
+        <input type="text" v-model="searchKeyword" placeholder="Search" aria-label="Search">
+        <button class="btn-outline-green" @click="search">Search</button>
+        <!--        </form>-->
+        <button class="btn-outline-light-blue" @click="logout">로그아웃</button>
       </div>
     </nav>
-
-    <table class = "table table-bordered">
+    {{ searchKeyword }}
+    <table class="table table-bordered">
       <tr>
         <th>글 번호</th>
         <th>반</th>
@@ -15,17 +19,17 @@
         <th>제목</th>
         <th>-</th>
       </tr>
-      <tr v-for = "(post,i) in posts" :key="i">
-        <td>{{i}}</td>
-        <td>{{ post.student.class}}</td>
+      <tr v-for="(post,i) in posts" :key="i">
+        <td>{{ i }}</td>
+        <td>{{ post.student.class }}</td>
         <td>{{ post.student.name }}</td>
         <td>{{ post.title }}</td>
         <td>
-          <button class = "btn-outline-dark" @click="seePost(post.id)">글보기</button>
+          <button class="btn-outline-dark" @click="seePost(post.id)">글보기</button>
         </td>
       </tr>
     </table>
-    <button class = "btn-outline-dark" @click="createPost">글 작성</button>
+    <button class="btn-outline-dark" @click="createPost">글 작성</button>
 
   </div>
 </template>
@@ -34,22 +38,21 @@
 import {firebase} from "@/firebase/firebaseConfig";
 
 export default {
-  name:'studentHome',
-  components: {
-
-  },
+  name: 'studentHome',
+  components: {},
   data() {
     return {
       fbCollection: 'board',
-      authors : [],
-      posts : [],
+      authors: [],
+      posts: [],
+      searchKeyword: '',
     }
   },
   mounted() {
     const self = this;
     self.init();
   },
-  methods:{
+  methods: {
     init() {
       this.getPostList()
     },
@@ -70,18 +73,41 @@ export default {
             });
           })
     },
+    search() {
+      const self = this;
+      self.posts.splice(0)
+      const db = firebase.firestore();
+      db.collection(self.fbCollection)
+          .where("title", "==", self.searchKeyword)
+          .get()
+          .then((querySnapshot) => {
+            if(self.searchKeyword == ""){
+              self.getPostList()
+            }
+            if (querySnapshot.size === 0) {
+              return
+            }
+            querySnapshot.forEach((doc) => {
+              const _data = doc.data();
+              console.log(_data)
+              _data.id = doc.id
+              self.posts.push(_data)
+
+            });
+          })
+    },
     seePost(value) {
       const self = this
-      self.$router.push({name:'postView', params: {id:value}})
+      self.$router.push({name: 'postView', params: {id: value}})
     },
     createPost() {
       const self = this;
       self.$router.push('/newPost')
     },
-      logout() {
-        firebase.auth().signOut()
-        this.$router.push('/')
-      },
+    logout() {
+      firebase.auth().signOut()
+      this.$router.push('/')
+    },
   },
 }
 
