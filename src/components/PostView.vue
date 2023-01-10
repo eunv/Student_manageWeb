@@ -20,12 +20,12 @@
       <tr>
         <th>작성자</th>
         <th>댓글</th>
-<!--        <th>작성 시간</th>-->
+        <th>작성 날짜</th>
       </tr>
       <tr v-for="(reply,i) in replies" :key="i">
         <td>{{reply.student.name}}</td>
         <td>{{reply.content}}</td>
-<!--        <td>{{reply.time}}</td>-->
+        <td>{{reply.time}}</td>
       </tr>
     </table>
 
@@ -78,12 +78,26 @@ export default {
             querySnapshot.forEach((doc) => {
               const _data = doc.data();
               _data.id = doc.id
+              const date = new Date(_data.time.seconds * 1000);
+              _data.time = getDate(date);
               self.replies.push(_data)
-              // let myTimeDate = new Date(replie.time.seconds *1000)
-              // console.log(myTimeDate)
             });
 
           })
+
+      const getDate = (date, separated = '-', notFullYear = false) => {
+        if (date instanceof Date) {
+          let year = date.getFullYear()
+          let month = date.getMonth() + 1
+          let day = date.getDate()
+
+          if (notFullYear) year = year.toString().slice(2, 4)
+          if (month < 10) month = `0${month}`
+          if (day < 10) day = `0${day}`
+
+          return `${year}${separated}${month}${separated}${day}`
+        } else return '';
+      }
     },
     createReply() {
       const self = this;
@@ -103,7 +117,6 @@ export default {
           name: self.studentInfo.name,
           phone: self.studentInfo.phone,
         }
-        // time:
       }
       db.collection("reply")
           .doc()
@@ -112,6 +125,7 @@ export default {
             alert("댓글작성 완료!")
             self.$router.push('/studentHome')
           })
+
     },
     getData() {
       const self = this;

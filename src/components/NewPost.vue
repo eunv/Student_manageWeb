@@ -9,7 +9,7 @@
     <div>제목: <input type="text" v-model="post.title"></div>
     <div>내용: <input type="text" v-model="post.content"></div>
     <button class="btn-outline-amber right" @click="goBack">취소</button>
-    <button class="btn-outline-green right" @click="confirm">게시</button>
+    <button class="btn-outline-green right" @click="confirm">등록</button>
   </div>
 </template>
 
