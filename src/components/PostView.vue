@@ -81,7 +81,6 @@ export default {
               self.replies.push(_data)
               // let myTimeDate = new Date(replie.time.seconds *1000)
               // console.log(myTimeDate)
-
             });
 
           })
@@ -93,6 +92,7 @@ export default {
       const _data = {
         board_id: self.id,
         content: self.comment,
+        reply_uid: this.$store.state.user.uid,
         time: now,
         student: {
           age: self.studentInfo.age,
@@ -102,7 +102,6 @@ export default {
           level: self.studentInfo.level,
           name: self.studentInfo.name,
           phone: self.studentInfo.phone,
-
         }
         // time:
       }
